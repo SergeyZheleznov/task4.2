@@ -1,0 +1,111 @@
+#include <iostream>
+#include <fstream>
+#include <conio.h>
+#include <stdlib.h>
+#include <cstdio>
+#include <sstream>  // библиотека для операций со строками
+#include <cstring>  // библиотека для операций со строками
+#include <windows.h> // Для русского языка
+
+class Address {
+protected:
+    std::string city;
+    std::string street;
+    int buildingNumber;
+    int flatNumber;
+
+public:
+    Address()
+    {
+        std::string city = "Anonymous";
+        std::string street = "Anonymous";
+        int buildingNumber = 0;
+        int flatNumber = 0;
+    }
+
+    Address(std::string city, std::string street, int buildingNumber, int flatNumber)
+    {
+        this->city = city;
+        this->street = street;
+        this->buildingNumber = buildingNumber;
+        this->flatNumber = flatNumber;
+    }
+
+    void get_print_address() {
+        std::cout << city << ", " << street << ", " << buildingNumber << ", " << flatNumber << std::endl;
+    };
+
+    std::string getCity() {
+        return city;
+    }
+
+    std::string getStreet() {
+        return street;
+    }
+
+    int getBuildingNumber() {
+        return buildingNumber;
+    }
+
+    int getFlatNumber() {
+        return flatNumber;
+    }
+};
+
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    // std::system("chcp 1251");
+
+    std::string fileName = "int.txt";
+    std::ifstream myFile(fileName);
+
+    if (myFile) {
+        std::cout << "Файл открыт" << std::endl;
+
+        int numberOfAddress;
+        myFile >> numberOfAddress;
+
+        std::string* arr_city = new std::string[numberOfAddress];
+        std::string* arr_street = new std::string[numberOfAddress];
+        int* arr_buildingNumber = new int[numberOfAddress];
+        int* arr_flatNumber = new int[numberOfAddress];
+        Address arr_address[3];
+
+        for (int i = 0; i < numberOfAddress; i++) {
+            myFile >> arr_city[i];
+            myFile >> arr_street[i];
+            myFile >> arr_buildingNumber[i];
+            myFile >> arr_flatNumber[i];
+            arr_address[i] = Address(arr_city[i], arr_street[i], arr_buildingNumber[i], arr_flatNumber[i]);
+        }
+        std::string fileOutName = "out.txt";
+        std::ofstream myOutFile(fileOutName);
+
+        if (myOutFile) {
+            std::cout << "Файл открыт успешно" << std::endl;
+            myOutFile << numberOfAddress << std::endl;
+
+            for (int i = (numberOfAddress - 1); 0 <= i; --i) {
+                myOutFile << arr_address[i].getCity() << ", ";
+                myOutFile << arr_address[i].getStreet() << ", ";
+                myOutFile << arr_address[i].getBuildingNumber() << ", ";
+                myOutFile << arr_address[i].getFlatNumber() << std::endl;
+            }
+            myOutFile.close();
+        }
+        myFile.close();
+    }
+
+    else {
+        std::cout << "Не получилось открыть файл" << std::endl;
+        return 0;
+    }
+    
+    std::cout << "Hello World!\n";
+    return 0;
+}
+
